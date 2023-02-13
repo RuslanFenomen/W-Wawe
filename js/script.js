@@ -26,12 +26,28 @@ SearchBtn.addEventListener('click', function () {
   SearchWrapper.classList.toggle('header__search--active')
 })
 
-// btn-live
-const liveBtn = document.querySelector('.header__live-btn-mobile')
+// btn-live-mobile
+const liveBtnMobile = document.querySelector('.header__live-btn-mobile')
 const liveWrapper = document.querySelector('.header__bottom-wrapper')
 
-liveBtn.addEventListener('click', function () {
+liveBtnMobile.addEventListener('click', function () {
   liveWrapper.classList.toggle('header__bottom-wrapper--active')
+})
+
+// play-pause
+const btnPlayPause = document.querySelectorAll('.play-pause')
+
+btnPlayPause.forEach(btn => {
+  btn.addEventListener('click', function () {
+    if (btn.classList.contains('play-pause--active')) {
+      btn.classList.remove('play-pause--active')
+    } else {
+      btnPlayPause.forEach(btn => {
+        btn.classList.remove('play-pause--active')
+      })
+      btn.classList.add('play-pause--active')
+    }
+  })
 })
 
 // select
@@ -157,22 +173,66 @@ likeBtn.forEach(btn => {
 
 // more btn
 const moreBtn = document.querySelector('.podcasts__btn-more');
+const podcastsItem = document.querySelectorAll('.podcasts__item');
+
+if (window.innerWidth > 576) {
+  for (let i = 0; i < 8; i++) {
+    podcastsItem[i].classList.remove('podcasts__item--hidden')
+  }
+  if (podcastsItem.length <= 8) {
+    moreBtn.classList.display = 'none'
+  }
+} else if (window.innerWidth <= 576) {
+  for (let i = 0; i < 4; i++) {
+    podcastsItem[i].classList.remove('podcasts__item--hidden')
+  }
+  if (podcastsItem.length <= 4) {
+    moreBtn.classList.display = 'none'
+  }
+}
+
+
 
 moreBtn.addEventListener('click', function () {
-  const visibleТumber = 2;
-  let podcastsItem = document.querySelectorAll('.podcasts__item--hidden');
+  const podcastsItemHidden = document.querySelectorAll('.podcasts__item--hidden');
+  const counter = 4
 
-
-  for (let i = 0; i < visibleТumber; i++) {
-    if (podcastsItem.length > 2) {
-      podcastsItem[i].classList.remove('podcasts__item--hidden');
-    } else if (podcastsItem.length === 2) {
-      podcastsItem[i].classList.remove('podcasts__item--hidden');
-      moreBtn.style.display = 'none'
-    } else if (podcastsItem.length === 1) {
-      podcastsItem = document.querySelector('.podcasts__item--hidden');
-      podcastsItem.classList.remove('podcasts__item--hidden');
-      moreBtn.style.display = 'none'
+  if (podcastsItemHidden.length > counter) {
+    for (let i = 0; i < counter; i++) {
+      podcastsItemHidden[i].classList.remove('podcasts__item--hidden');
     }
+  } else if (podcastsItemHidden.length <= counter && podcastsItemHidden.length >= 2) {
+    for (let i = 0; i < podcastsItemHidden.length; i++) {
+      podcastsItemHidden[i].classList.remove('podcasts__item--hidden');
+    }
+    moreBtn.style.display = 'none'
+  } else if (podcastsItemHidden.length === 1) {
+    document.querySelector('.podcasts__item--hidden').classList.remove('podcasts__item--hidden');
+    moreBtn.style.display = 'none'
   }
 });
+
+// popup
+const popupBg = document.querySelector('.popup__bg')
+const popup = document.querySelector('.popup')
+const openPopupBtn = document.querySelectorAll('.popup__open')
+const closePopupBtn = document.querySelector('.popup__close')
+
+openPopupBtn.forEach((btn) => {
+  btn.addEventListener('click', function () {
+    popupBg.classList.add('popup__bg--active')
+    popup.classList.add('popup--active')
+  })
+})
+
+closePopupBtn.addEventListener('click', function () {
+  popupBg.classList.remove('popup__bg--active')
+  popup.classList.remove('popup--active')
+})
+
+document.addEventListener('click', function (element) {
+  if (element.target === popupBg) {
+    popupBg.classList.remove('popup__bg--active')
+    popup.classList.remove('popup--active')
+  }
+})
